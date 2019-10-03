@@ -4,16 +4,13 @@ import {TodoContext} from './TodoStore'
 
 const List = () => {
 
-    const {todos, loading, changeTodoStatus} = useContext(TodoContext)
+    const {todos, loading} = useContext(TodoContext)
 
     let todoList =<div>loading...</div>
     if(!loading){
     todoList = todos.map((todo)=>{
         return (
-            <Item 
-            key={todo.id} 
-            todo={todo}
-            changeTodoStatus={changeTodoStatus}/>
+            <Item key={todo.id} todo={todo} />
         )
     }
     )

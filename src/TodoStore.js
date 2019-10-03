@@ -1,41 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import List from './List.jsx'
+import React, { useEffect, useReducer } from 'react';
 import useFetch from './useFetch'
-import Header from './Header'
-import Form from './Form'
+import {todoReducer} from './reducers'
 
 export const TodoContext = React.createContext();
 // 상위의 스토어 역할을 함
 
-const TodoStore = () =>{
-  const [todos, setTodos] = useState([]);
-  // useState는 배열을 반환하는데 배열의 첫번째 인자는 상태값,
-  // 두번째 인자로는 메소드를 반환함
-  // useState의 인자로 전달되는 값은 initialState값임
-  // 결국 여기서 todos는 initialState로 전달된 'js공부'임
-  // state값이 변경되면 렌더링이 다시 호출됨
+const TodoStore = (props) =>{
+  const [todos, dispatch] = useReducer(todoReducer, []);
 
-
-  // const loading = useFetch(setTodos, 'http://localhost:8000/todo')
-
-  const addTodo = (newTodo) => {
-    setTodos([...todos, {'title':newTodo, 'id':todos.length, 'status': 'todo'}])
-    // todos가 배열이라 분해해서 원소를 다 꺼낸 뒤 뒤에 객체 형태의 새todo를 받아 모두 배열로 묶어주는 작업
+  const setInitData = (InitData) =>{
+    dispatch({type:"SET_INIT_DATA", payload:InitData})
   }
 
-  const changeTodoStatus = (id) => {
-    const updateTodos = todos.map(todo=>{
-      if(todo.id === +id){
-        // 여기서 +id는 문자열로 넘어온 id값을 숫자로 바꿔주는 기능
-        if(todo.status === "done") todo.status = "todo"
-        else todo.status = "done"
-      }
-      return todo 
-    })
-    // 위의 과정으로 바뀐 todos(state)는 updateTodos를 통해야 비로소 재랜더링되므로 아래의 과정을 거쳐야 함
-    setTodos(updateTodos)
-  }
+  // const loading = useFetch(setInitData, 'http://localhost:8000/todo')
 
   useEffect(()=>{
     console.log("새롭군요", todos)
@@ -45,12 +22,9 @@ const TodoStore = () =>{
   // componentDidMount나 componentDidUpdate와 같은 렌더링 이후의 사이드이펙트 관련 처리
   
   return (
-      <TodoContext.Provider value={{todos, addTodo, /*loading,*/ changeTodoStatus}}>
+      <TodoContext.Provider value={{todos, /*loading,*/ dispatch}}>
         {/* value로 객체를 전달 */}
-        <Header />
-        <Form />
-        <List />
-        {/* 후자의 todos가 useState에서 반환된 todos임 */}
+        {props.children}
       </TodoContext.Provider> 
   )
 }
