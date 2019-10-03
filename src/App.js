@@ -3,6 +3,10 @@ import './App.css';
 import List from './List.jsx'
 import useFetch from './useFetch'
 import Header from './Header'
+import Form from './Form'
+
+export const TodoContext = React.createContext();
+// 상위의 스토어 역할을 함
 
 const App = () =>{
   const [todos, setTodos] = useState([]);
@@ -49,15 +53,13 @@ const App = () =>{
   // componentDidMount나 componentDidUpdate와 같은 렌더링 이후의 사이드이펙트 관련 처리
   
   return (
-    <div>    
-      <Header todos={todos} />
-      <form action="">
-        <input type="text" name="" onChange={changeInputData}/>
-        <button onClick={addTodo}>할 일 추가</button>
-      </form>
-      <List todos={todos} /*loading={loading}*/ changeTodoStatus={changeTodoStatus} />
-      {/* 후자의 todos가 useState에서 반환된 todos임 */}
-    </div>
+      <TodoContext.Provider value={{todos}}>
+        {/* value로 객체를 전달 */}
+        <Header />
+        <Form addTodo={addTodo} changeInputData={changeInputData} />
+        <List todos={todos} /*loading={loading}*/ changeTodoStatus={changeTodoStatus} />
+        {/* 후자의 todos가 useState에서 반환된 todos임 */}
+      </TodoContext.Provider> 
   )
 }
 
