@@ -16,18 +16,10 @@ const TodoStore = () =>{
   // 결국 여기서 todos는 initialState로 전달된 'js공부'임
   // state값이 변경되면 렌더링이 다시 호출됨
 
-  const [newTodo, setNewTodo] = useState();
 
   // const loading = useFetch(setTodos, 'http://localhost:8000/todo')
 
-  const changeInputData = (e)=>{
-    setNewTodo(e.target.value);
-    // setNewTodo는 newTodo정보를 갱신하는 역할을 함
-  }
-  const addTodo = (e) => {
-    e.preventDefault()
-    // 이 설정을 해주지 않으면 '할 일 추가'버튼을 눌러도 새로고침 되어서
-    // 할 일 추가가 안 됨
+  const addTodo = (newTodo) => {
     setTodos([...todos, {'title':newTodo, 'id':todos.length, 'status': 'todo'}])
     // todos가 배열이라 분해해서 원소를 다 꺼낸 뒤 뒤에 객체 형태의 새todo를 받아 모두 배열로 묶어주는 작업
   }
@@ -53,7 +45,7 @@ const TodoStore = () =>{
   // componentDidMount나 componentDidUpdate와 같은 렌더링 이후의 사이드이펙트 관련 처리
   
   return (
-      <TodoContext.Provider value={{todos, addTodo, changeInputData, /*loading,*/ changeTodoStatus}}>
+      <TodoContext.Provider value={{todos, addTodo, /*loading,*/ changeTodoStatus}}>
         {/* value로 객체를 전달 */}
         <Header />
         <Form />
