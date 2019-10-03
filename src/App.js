@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import List from './List.jsx'
 import useFetch from './useFetch'
+import Header from './Header'
 
 const App = () =>{
   const [todos, setTodos] = useState([]);
@@ -26,6 +27,20 @@ const App = () =>{
     setTodos([...todos, {'title':newTodo, 'id':todos.length, 'status': 'todo'}])
     // todos가 배열이라 분해해서 원소를 다 꺼낸 뒤 뒤에 객체 형태의 새todo를 받아 모두 배열로 묶어주는 작업
   }
+
+  const changeTodoStatus = (id) => {
+    const updateTodos = todos.map(todo=>{
+      if(todo.id === +id){
+        // 여기서 +id는 문자열로 넘어온 id값을 숫자로 바꿔주는 기능
+        if(todo.status === "done") todo.status = "todo"
+        else todo.status = "done"
+      }
+      return todo 
+    })
+    // 위의 과정으로 바뀐 todos(state)는 updateTodos를 통해야 비로소 재랜더링되므로 아래의 과정을 거쳐야 함
+    setTodos(updateTodos)
+  }
+
   useEffect(()=>{
     console.log("새롭군요", todos)
   }, [todos])
@@ -35,12 +50,12 @@ const App = () =>{
   
   return (
     <div>    
-      <h1>todo 애플리케이션</h1>
+      <Header todos={todos} />
       <form action="">
         <input type="text" name="" onChange={changeInputData}/>
         <button onClick={addTodo}>할 일 추가</button>
       </form>
-      <List todos={todos} /*loading={loading}*/ />
+      <List todos={todos} /*loading={loading}*/ changeTodoStatus={changeTodoStatus} />
       {/* 후자의 todos가 useState에서 반환된 todos임 */}
     </div>
   )
