@@ -8,7 +8,7 @@ import Form from './Form'
 export const TodoContext = React.createContext();
 // 상위의 스토어 역할을 함
 
-const App = () =>{
+const TodoStore = () =>{
   const [todos, setTodos] = useState([]);
   // useState는 배열을 반환하는데 배열의 첫번째 인자는 상태값,
   // 두번째 인자로는 메소드를 반환함
@@ -53,11 +53,11 @@ const App = () =>{
   // componentDidMount나 componentDidUpdate와 같은 렌더링 이후의 사이드이펙트 관련 처리
   
   return (
-      <TodoContext.Provider value={{todos}}>
+      <TodoContext.Provider value={{todos, addTodo, changeInputData, /*loading,*/ changeTodoStatus}}>
         {/* value로 객체를 전달 */}
         <Header />
-        <Form addTodo={addTodo} changeInputData={changeInputData} />
-        <List todos={todos} /*loading={loading}*/ changeTodoStatus={changeTodoStatus} />
+        <Form />
+        <List />
         {/* 후자의 todos가 useState에서 반환된 todos임 */}
       </TodoContext.Provider> 
   )
@@ -65,4 +65,4 @@ const App = () =>{
 
 
 
-export default App;
+export default TodoStore;
